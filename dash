@@ -1,0 +1,76 @@
+import { Card, CardContent } from "@/components/ui/card";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+
+const data = [
+  { month: "Mar 2024", price: 455000, sales: 980, cashPct: 34.7, inventory: 2100 },
+  { month: "Apr 2024", price: 460000, sales: 1049, cashPct: 33.1, inventory: 2150 },
+  { month: "May 2024", price: 470000, sales: 980, cashPct: 38.8, inventory: 2250 },
+  { month: "Jun 2024", price: 468000, sales: 874, cashPct: 31.1, inventory: 2300 },
+  { month: "Jul 2024", price: 475000, sales: 869, cashPct: 32.6, inventory: 2350 },
+  { month: "Aug 2024", price: 470000, sales: 854, cashPct: 30.7, inventory: 2400 },
+  { month: "Sep 2024", price: 460000, sales: 648, cashPct: 30.1, inventory: 2500 },
+  { month: "Oct 2024", price: 450000, sales: 648, cashPct: 32.3, inventory: 2550 },
+  { month: "Nov 2024", price: 440000, sales: 690, cashPct: 45.9, inventory: 2650 },
+  { month: "Dec 2024", price: 447000, sales: 918, cashPct: 41.3, inventory: 2700 },
+  { month: "Jan 2025", price: 442000, sales: 707, cashPct: 46.0, inventory: 3100 },
+  { month: "Feb 2025", price: 445000, sales: 806, cashPct: 41.9, inventory: 3538 },
+];
+
+export default function ClearwaterDashboard() {
+  return (
+    <div className="grid gap-6 p-4 grid-cols-1 md:grid-cols-2">
+      <Card>
+        <CardContent>
+          <h2 className="text-xl font-semibold mb-4">Median Sale Price</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="price" stroke="#8884d8" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <h2 className="text-xl font-semibold mb-4">Closed Sales Volume</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={data}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="sales" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <h2 className="text-xl font-semibold mb-4">Cash Sales (%)</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="cashPct" stroke="#ffc658" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <h2 className="text-xl font-semibold mb-4">Active Inventory</h2>
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="inventory" stroke="#ff7300" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
