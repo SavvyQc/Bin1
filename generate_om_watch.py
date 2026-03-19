@@ -330,23 +330,47 @@ def build_report(output_path):
     story.append(HRFlowable(width="100%", thickness=0.5, color=colors.HexColor("#CBD5E1")))
     story.append(Spacer(1, 3))
     story.append(Paragraph("<b>SOURCES</b>", styles["source_label"]))
-    sources = (
-        "ROCK Commercial Real Estate — Quarterly Market Reports (rockrealestate.net/market-reports)  ·  "
-        "Bisnow — \"As Pennsylvania's Top Industrial Markets Face Constraints, Investors Jump To 2 Overlooked Counties\" (2025)  ·  "
-        "CommercialCafe / Yardi Research — Lancaster Office & Industrial Market Trends  ·  "
-        "CommercialSearch — Lancaster County Active Listings Data  ·  "
-        "CoStar — Lancaster County Industrial Investment Volume (via Bisnow)  ·  "
-        "Colliers — U.S. Retail Q4 2025 Vacancy Report (knowledge-leader.colliers.com)  ·  "
-        "CommercialCafe — U.S. Industrial & Office National Reports (Feb 2026)  ·  "
-        "Cushman & Wakefield — PA I-81/I-78 Corridor MarketBeat  ·  "
-        "Pennsylvania DCED / PIDA — Board Minutes & Loan Approvals (Nov 2025)  ·  "
-        "Lancaster City Alliance — Development Activity (lancastercityalliance.org)  ·  "
-        "EDC Lancaster County (edclancaster.com)  ·  "
-        "CityFeet — Lancaster PA Retail Listings  ·  "
-        "Central Penn Business Journal — Industrial Market Coverage  ·  "
-        "propertycashin.com — Lancaster Commercial Market Statistics 2025"
-    )
-    story.append(Paragraph(sources, styles["source_text"]))
+
+    source_list = [
+        ("ROCK Commercial Real Estate — Quarterly Market Reports",
+         "https://www.rockrealestate.net/market-reports/"),
+        ("Bisnow — PA Industrial Markets: Investors Jump to Lancaster & Berks Counties (2025)",
+         "https://www.bisnow.com/philadelphia/news/industrial/berks-lancaster-development-investment-warehouse-logistics-pennsylvania-132306"),
+        ("CommercialCafe / Yardi Research — Lancaster Office & Industrial Market Trends",
+         "https://www.commercialcafe.com/commercial-real-estate/us/pa/lancaster-county/"),
+        ("CommercialSearch — Lancaster County Active Listings",
+         "https://www.commercialsearch.com/commercial-real-estate/us/pa/lancaster-county/"),
+        ("Colliers — U.S. Retail Q4 2025 Vacancy Report",
+         "https://knowledge-leader.colliers.com/nicole-larson/vacancy-rates-stabilize-as-market-absorbs-2025-bankruptcies-u-s-retail-q4-2025/"),
+        ("CommercialCafe — U.S. Industrial National Report (Feb 2026)",
+         "https://www.commercialcafe.com/blog/national-industrial-report/"),
+        ("Cushman & Wakefield — Philadelphia/PA MarketBeats",
+         "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/philadelphia-marketbeats"),
+        ("Pennsylvania DCED / PIDA — Board Minutes & Loan Approvals (Nov 2025)",
+         "https://dced.pa.gov/download/2025-11-05-pida-board-minutes/?ind=1768238051074&filename=2025-11-05_PIDA-Meeting-Minutes.pdf&wpdmdl=128475"),
+        ("Shapiro Admin PIDA Loans — Berks & Lancaster Counties",
+         "https://dced.pa.gov/newsroom/shapiro-administration-invests-more-than-4-million-through-new-pida-loans-to-help-businesses-grow-in-berks-and-lancaster-counties/"),
+        ("Lancaster City Alliance — Development Activity",
+         "https://lancastercityalliance.org/development-activity/"),
+        ("EDC Lancaster County",
+         "https://www.edclancaster.com/"),
+        ("CityFeet — Lancaster PA Retail Space for Lease",
+         "https://www.cityfeet.com/cont/lancaster-pa/retail-space-for-lease"),
+        ("Central Penn Business Journal — Industrial Vacancy Coverage",
+         "https://www.cpbj.com/industrial-vacancy-rates-keep-falling-in-central-pa-beyond/"),
+        ("propertycashin.com — Lancaster Commercial Market Statistics 2025",
+         "https://propertycashin.com/investing-guides/commercial-real-estate-market-lancaster-city-pa/"),
+        ("High Associates Ltd. — Lancaster Commercial Listings (LoopNet)",
+         "https://www.loopnet.com/company/high-associates-ltd/lancaster-pa/2901p1cl/"),
+    ]
+
+    # Build linked source line: "Label <link>" pairs separated by bullets
+    link_style = styles["source_text"]
+    parts = []
+    for label, url in source_list:
+        parts.append(f'<a href="{url}" color="#2E5E8E"><u>{label}</u></a>')
+    sources_para = "  ·  ".join(parts)
+    story.append(Paragraph(sources_para, link_style))
 
     doc.build(story)
     print(f"Report written to: {output_path}")
