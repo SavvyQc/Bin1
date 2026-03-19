@@ -15,15 +15,15 @@ from reportlab.platypus import KeepTogether
 from datetime import date
 import os
 
-# ── Color Palette ──────────────────────────────────────────────────────────────
-NAVY      = colors.HexColor("#1B2B4B")
-STEEL     = colors.HexColor("#2E5E8E")
-SLATE     = colors.HexColor("#4A6FA5")
-AMBER     = colors.HexColor("#D97706")
-LIGHT_BG  = colors.HexColor("#F0F4F8")
-MID_GREY  = colors.HexColor("#6B7280")
+# ── Red Rose Appraisals Brand Palette ─────────────────────────────────────────
+NAVY      = colors.HexColor("#8B1A1A")   # Rose Deep — primary headers
+STEEL     = colors.HexColor("#B22222")   # Rose Mid — industrial accent
+SLATE     = colors.HexColor("#4A4A4A")   # Slate — office accent / body
+AMBER     = colors.HexColor("#B8860B")   # Lancaster Gold — retail accent
+LIGHT_BG  = colors.HexColor("#F5EDED")   # Blush — panel backgrounds
+MID_GREY  = colors.HexColor("#9CA3AF")   # Stone — captions / muted
 WHITE     = colors.white
-BLACK     = colors.black
+BLACK     = colors.HexColor("#1E1E1E")   # Charcoal — body text
 
 # ── Styles ─────────────────────────────────────────────────────────────────────
 def make_styles():
@@ -109,32 +109,38 @@ def make_styles():
 
 
 def header_block(styles, report_date):
-    """Dark navy header bar with title and date."""
+    """Red Rose branded header bar."""
     title = Paragraph("Lancaster County OM Watch", styles["report_title"])
+    brand = Paragraph(
+        "Red Rose Appraisals  ·  redroseappraisals.com  ·  (717) 314-4635",
+        ParagraphStyle("brand_line", fontName="Helvetica", fontSize=7,
+                       textColor=colors.HexColor("#D4A0A0"), alignment=TA_RIGHT, leading=9)
+    )
     sub   = Paragraph(
         "Commercial Real Estate Market Intelligence  |  Industrial · Office · Retail",
         styles["report_sub"]
     )
     date_p = ParagraphStyle(
         "date_p", fontName="Helvetica-Bold", fontSize=8.5,
-        textColor=colors.HexColor("#94A3B8"), alignment=TA_RIGHT, leading=11
+        textColor=colors.HexColor("#F5EDED"), alignment=TA_RIGHT, leading=11
     )
     date_str = Paragraph(report_date, date_p)
 
     tbl = Table(
-        [[title, date_str], [sub, ""]],
-        colWidths=[4.8*inch, 2.6*inch],
+        [[title, brand],
+         [sub, date_str]],
+        colWidths=[4.4*inch, 3.0*inch],
         rowHeights=[18, 13],
     )
     tbl.setStyle(TableStyle([
         ("BACKGROUND",  (0,0), (-1,-1), NAVY),
         ("VALIGN",      (0,0), (-1,-1), "MIDDLE"),
-        ("ALIGN",       (1,0), (1,0),   "RIGHT"),
+        ("ALIGN",       (1,0), (1,-1),  "RIGHT"),
         ("LEFTPADDING", (0,0), (-1,-1), 10),
         ("RIGHTPADDING",(0,0), (-1,-1), 10),
-        ("TOPPADDING",  (0,0), (-1,-1), 6),
+        ("TOPPADDING",  (0,0), (0,0),   8),
+        ("TOPPADDING",  (0,1), (-1,1),  2),
         ("BOTTOMPADDING",(0,0),(-1,-1), 6),
-        ("SPAN",        (0,1), (-1,1)),
     ]))
     return tbl
 
@@ -368,9 +374,22 @@ def build_report(output_path):
     link_style = styles["source_text"]
     parts = []
     for label, url in source_list:
-        parts.append(f'<a href="{url}" color="#2E5E8E"><u>{label}</u></a>')
+        parts.append(f'<a href="{url}" color="#B22222"><u>{label}</u></a>')
     sources_para = "  ·  ".join(parts)
     story.append(Paragraph(sources_para, link_style))
+
+    # ── Branded Footer ────────────────────────────────────────────────────────
+    story.append(Spacer(1, 5))
+    footer_style = ParagraphStyle(
+        "footer", fontName="Helvetica", fontSize=6.5,
+        textColor=colors.HexColor("#9CA3AF"), alignment=TA_CENTER, leading=9
+    )
+    story.append(Paragraph(
+        "Red Rose Appraisals Ltd.  ·  148 Mason Drive, Ephrata, PA 17522  ·  "
+        "(717) 314-4635  ·  chandra@redroseappraisals.com  ·  redroseappraisals.com  ·  "
+        "Certified Women's Owned Business  ·  PA · MD · VA",
+        footer_style
+    ))
 
     doc.build(story)
     print(f"Report written to: {output_path}")
